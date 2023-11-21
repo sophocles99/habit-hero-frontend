@@ -1,0 +1,14 @@
+.app {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: linear-gradient(
+    to right top,
+    #051937,
+    #0f2f5d,
+    #1b4687,
+    #285fb3,
+    #3679e1
+  );
+}
