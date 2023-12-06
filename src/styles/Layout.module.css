@@ -1,0 +1,11 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 20rem;
+  height: 40rem;
+  padding: 1.5rem;
+  border-radius: 1.5rem;
+  background-color: #f1f3f5;
+  color: #285fb3;
+}

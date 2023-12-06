@@ -1,0 +1,3 @@
+type ChildrenType = {
+  children: ReactNode;
+};

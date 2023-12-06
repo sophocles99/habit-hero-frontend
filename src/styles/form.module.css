@@ -1,0 +1,48 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.form-input {
+  height: 2.5rem;
+  padding: 0 0.5rem;
+  border: 2px solid #285fb3;
+  outline: none;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  background-color: #f1f3f5;
+  color: #184fa3;
+}
+
+/* Apply same styling when user uses autofill */
+.form-input:-webkit-autofill {
+  /* Overwrite browser's background colour with inset box-shadow */
+  -webkit-box-shadow: 0 0 0 1000px #f1f3f5 inset !important;
+  -webkit-text-fill-color: #184fa3;
+}
+
+.form-input:active,
+.form-input:focus {
+  box-shadow: 0 0 2px 2px #285fb3;
+}
+
+.form-button {
+  height: 4rem;
+  margin-top: 1rem;
+  border-radius: 0.5rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border: none;
+  background-color: #285fb3;
+  color: #f1f3f5;
+  cursor: pointer;
+}
