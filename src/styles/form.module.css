@@ -46,3 +46,7 @@
   color: #f1f3f5;
   cursor: pointer;
 }
+
+.hidden {
+  display: none;
+}
