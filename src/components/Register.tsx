@@ -1,29 +1,64 @@
-import { FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import Joi from "joi";
 import { registerUser } from "../api";
-import styles from "../styles/form.module.css";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import styles from "../styles/form.module.css";
+
+const passwordRules = [
+  {
+    description: "At least one lowercase letter",
+    regex: /.*[a-z]/,
+  },
+  {
+    description: "At least one uppercase letter",
+    regex: /.*[A-Z]/,
+  },
+  { description: "At least one number", regex: /.*\d/ },
+  {
+    description: "At least eight characters long",
+    regex: /.{8,}/,
+  },
+];
 
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [emailValid, setEmailValid] = useState(true);
   const [password, setPassword] = useState("");
+  const [passwordFocus, setPasswordFocus] = useState(false);
+  const [passwordValid, setPasswordValid] = useState(true);
+  const [passwordRulesSatisfied, setPasswordRulesSatisfied] = useState(
+    Array(passwordRules.length).fill(false)
+  );
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { status, data, errorMessage } = await registerUser(
-      email,
-      name,
-      password
-    );
+    await registerUser(email, name, password);
   };
 
   const validateEmail = () => {
-    const { error } = Joi.string().email({ tlds: { allow: false } }).validate(email);
-    const isEmailValid = !Boolean(error);
+    const { error } = Joi.string()
+      .email({ tlds: { allow: false } })
+      .validate(email);
+    const isEmailValid = !error;
     setEmailValid(isEmailValid);
+  };
+
+  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setPassword(newValue);
+    let allRulesSatisfied = true;
+    setPasswordRulesSatisfied(
+      passwordRules.map((rule) => {
+        const isRuleSatisfied = rule.regex.test(newValue);
+        if (!isRuleSatisfied) allRulesSatisfied = false;
+        return isRuleSatisfied;
+      })
+    );
+    setPasswordValid(allRulesSatisfied);
   };
 
   return (
@@ -42,7 +77,13 @@ const Register = () => {
           onChange={(e) => setEmail(e.target.value)}
           onBlur={validateEmail}
         />
-        <p className={`${styles["email-error"]} ${emailValid ? styles["hidden"] : ""}`}>Please enter a valid email address</p>
+        <p
+          className={`${styles["email-error"]} ${
+            emailValid ? styles["hidden"] : ""
+          }`}
+        >
+          Please enter a valid email address
+        </p>
       </label>
       <label htmlFor="name" className={styles["form-label"]}>
         <p>Name</p>
@@ -50,24 +91,52 @@ const Register = () => {
           type="text"
           id="name"
           className={styles["form-input"]}
+          maxLength={20}
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
       </label>
-      <label htmlFor="password" className={styles["form-label"]}>
-        <p>Password</p>
+      <label
+        htmlFor="password"
+        className={styles["form-label"]}
+        onFocus={() => setPasswordFocus(true)}
+        onBlur={() => setPasswordFocus(false)}
+      >
+        <p>Password {passwordFocus}</p>
         <input
           type="password"
           id="password"
           className={styles["form-input"]}
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={handlePasswordChange}
+          onBlur={handlePasswordChange}
         />
         <p
+          className={`${styles["error"]} ${
+            !passwordValid && !passwordFocus ? "" : styles["hidden"]
+          }`}
+        >
+          Please enter a valid password
+        </p>
+        <div
           className={`${styles["password-feedback"]} ${
             passwordFocus ? "" : styles["hidden"]
           }`}
-        ></p>
+        >
+          {passwordRules.map((rule, index) => (
+            <p key={index}>
+              <FontAwesomeIcon
+                icon={faCheck}
+                className={
+                  passwordRulesSatisfied[index]
+                    ? styles["valid"]
+                    : styles["hidden"]
+                }
+              />{" "}
+              {rule.description}
+            </p>
+          ))}
+        </div>
       </label>
       <label htmlFor="confirm-password" className={styles["form-label"]}>
         <p>Confirm Password</p>

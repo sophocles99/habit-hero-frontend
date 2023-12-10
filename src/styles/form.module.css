@@ -15,12 +15,13 @@
 .form-input {
   height: 2.5rem;
   padding: 0 0.5rem;
-  border: 2px solid #285fb3;
+  border: 1px solid #285fb3;
   outline: none;
   border-radius: 0.5rem;
   font-weight: bold;
   background-color: #f1f3f5;
   color: #184fa3;
+  transition: all 250ms;
 }
 
 /* Apply same styling when user uses autofill */
@@ -30,9 +31,13 @@
   -webkit-text-fill-color: #184fa3;
 }
 
+.form-input:hover {
+  box-shadow: 0 0 0px 2px #285fb344;
+}
+
 .form-input:active,
 .form-input:focus {
-  box-shadow: 0 0 2px 2px #285fb3;
+  box-shadow: 0 0 0px 2px #285fb399;
 }
 
 .form-button {
@@ -50,3 +55,10 @@
 .hidden {
   display: none;
 }
+ .error {
+  font-style: italic;
+ }
+
+ .valid {
+  color: green;
+ }
