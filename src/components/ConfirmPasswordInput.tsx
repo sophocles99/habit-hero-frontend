@@ -1,4 +1,4 @@
-import { ChangeEvent, Dispatch, useState } from "react";
+import { ChangeEvent, Dispatch } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import styles from "../styles/form.module.css";
@@ -6,7 +6,7 @@ import styles from "../styles/form.module.css";
 type ConfirmPasswordInputProps = {
   confirmPassword: string;
   setConfirmPassword: Dispatch<string>;
-  confirmPasswordValid: boolean;
+  confirmPasswordValid: ValidState;
   setConfirmPasswordValid: Dispatch<boolean>;
   password: string;
 };
@@ -18,8 +18,6 @@ const ConfirmPasswordInput = ({
   setConfirmPasswordValid,
   password,
 }: ConfirmPasswordInputProps) => {
-  const [confirmPasswordFocus, setConfirmPasswordFocus] = useState(false);
-
   const handleConfirmPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newConfirmPassword = e.target.value;
     setConfirmPassword(newConfirmPassword);
@@ -27,12 +25,7 @@ const ConfirmPasswordInput = ({
   };
 
   return (
-    <label
-      htmlFor="confirm-password"
-      className={styles["form-label"]}
-      onFocus={() => setConfirmPasswordFocus(true)}
-      onBlur={() => setConfirmPasswordFocus(false)}
-    >
+    <label htmlFor="confirm-password" className={styles["form-label"]}>
       <p>Confirm Password</p>
       <input
         type="password"
@@ -41,14 +34,11 @@ const ConfirmPasswordInput = ({
         value={confirmPassword}
         onChange={handleConfirmPasswordChange}
       />
-      <div
-        className={`${styles["password-feedback"]} ${
-          confirmPasswordFocus ? "" : styles["hidden"]
-        }`}
-      >
-        {confirmPasswordValid && confirmPasswordFocus ? (
+      <div className={confirmPasswordValid === null ? styles["hidden"] : ""}>
+        {confirmPasswordValid ? (
           <p>
-            <FontAwesomeIcon icon={faCheck} className={styles["valid"]} /> Match
+            <FontAwesomeIcon icon={faCheck} className={styles["valid"]} />{" "}
+            Passwords match
           </p>
         ) : (
           <p className={styles["error"]}>Passwords do not match</p>

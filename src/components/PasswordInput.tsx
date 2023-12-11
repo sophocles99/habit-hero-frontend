@@ -6,7 +6,7 @@ import styles from "../styles/form.module.css";
 type PasswordInputProps = {
   password: string;
   setPassword: Dispatch<string>;
-  passwordValid: boolean;
+  passwordValid: ValidState;
   setPasswordValid: Dispatch<boolean>;
 };
 
@@ -51,6 +51,22 @@ const PasswordInput = ({
     setPasswordValid(allRulesSatisfied);
   };
 
+  const passwordRulesDisplay = (
+    <>
+      {passwordRules.map((rule, index) => (
+        <p key={index}>
+          <FontAwesomeIcon
+            icon={faCheck}
+            className={
+              passwordRulesSatisfied[index] ? styles["valid"] : styles["hidden"]
+            }
+          />{" "}
+          {rule.description}
+        </p>
+      ))}
+    </>
+  );
+
   return (
     <label
       htmlFor="password"
@@ -67,27 +83,21 @@ const PasswordInput = ({
         onChange={handlePasswordChange}
         onBlur={handlePasswordChange}
       />
-      <p
+      <div
         className={
-          !passwordValid && !passwordFocus ? styles["error"] : styles["hidden"]
+          passwordValid === null && !passwordFocus ? styles["hidden"] : ""
         }
       >
-        Please enter a valid password
-      </p>
-      <div className={passwordFocus ? "" : styles["hidden"]}>
-        {passwordRules.map((rule, index) => (
-          <p key={index}>
-            <FontAwesomeIcon
-              icon={faCheck}
-              className={
-                passwordRulesSatisfied[index]
-                  ? styles["valid"]
-                  : styles["hidden"]
-              }
-            />{" "}
-            {rule.description}
+        {passwordFocus && passwordValid !== true ? (
+          passwordRulesDisplay
+        ) : passwordValid ? (
+          <p>
+            <FontAwesomeIcon icon={faCheck} className={styles["valid"]} />{" "}
+            Password valid
           </p>
-        ))}
+        ) : (
+          <p className={styles["error"]}>Please enter a valid password</p>
+        )}
       </div>
     </label>
   );

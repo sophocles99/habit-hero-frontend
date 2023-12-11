@@ -9,12 +9,15 @@ import styles from "../styles/form.module.css";
 const Register = () => {
   const nameRef = useRef<HTMLInputElement>(null);
   const [name, setName] = useState("");
+
   const [email, setEmail] = useState("");
-  const [emailValid, setEmailValid] = useState(true);
+  const [emailValid, setEmailValid] = useState<ValidState>(null);
+
   const [password, setPassword] = useState("");
-  const [passwordValid, setPasswordValid] = useState(true);
+  const [passwordValid, setPasswordValid] = useState<ValidState>(null);
+
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [confirmPasswordValid, setConfirmPasswordValid] = useState(false);
+  const [confirmPasswordValid, setConfirmPasswordValid] = useState<ValidState>(null);
 
   useEffect(() => {
     if (nameRef.current) {

@@ -5,7 +5,7 @@ import { ChangeEvent, Dispatch } from "react";
 type EmailInputProps = {
   email: string;
   setEmail: Dispatch<string>;
-  emailValid: boolean;
+  emailValid: ValidState;
   setEmailValid: Dispatch<boolean>;
 };
 
@@ -33,7 +33,11 @@ const EmailInput = ({
         onChange={(e) => setEmail(e.target.value)}
         onBlur={validateEmail}
       />
-      <p className={`${styles["error"]} ${emailValid ? styles["hidden"] : ""}`}>
+      <p
+        className={`${styles["error"]} ${
+          emailValid !== false ? styles["hidden"] : ""
+        }`}
+      >
         Please enter a valid email address
       </p>
     </label>
