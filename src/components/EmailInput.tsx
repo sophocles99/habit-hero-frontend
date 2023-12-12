@@ -1,6 +1,8 @@
+import { useState } from "react";
 import Joi from "joi";
 import styles from "../styles/form.module.css";
 import { ChangeEvent, Dispatch } from "react";
+import { checkEmail } from "../api";
 
 type EmailInputProps = {
   email: string;
@@ -15,11 +17,21 @@ const EmailInput = ({
   emailValid,
   setEmailValid,
 }: EmailInputProps) => {
-  const validateEmail = (e: ChangeEvent<HTMLInputElement>) => {
+  const [emailDuplicate, setEmailDuplicate] = useState<ValidState>(null);
+
+  const validateEmail = async (e: ChangeEvent<HTMLInputElement>) => {
+    const email = e.target.value;
     const { error } = Joi.string()
       .email({ tlds: { allow: false } })
-      .validate(e.target.value);
-    setEmailValid(!error);
+      .validate(email);
+    if (!error) {
+      setEmailValid(true);
+      const { status } = await checkEmail(email);
+      console.log(status === 200);
+      setEmailDuplicate(status === 200);
+    } else {
+      setEmailValid(false);
+    }
   };
 
   return (
@@ -39,6 +51,13 @@ const EmailInput = ({
         }`}
       >
         Please enter a valid email address
+      </p>
+      <p
+        className={`${styles["error"]} ${
+          emailDuplicate !== false ? styles["hidden"] : ""
+        }`}
+      >
+        Email already in use. Please select another email address or login
       </p>
     </label>
   );
