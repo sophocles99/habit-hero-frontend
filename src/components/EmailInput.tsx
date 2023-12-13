@@ -27,7 +27,6 @@ const EmailInput = ({
     if (!error) {
       setEmailValid(true);
       const { status } = await checkEmail(email);
-      console.log(status === 200);
       setEmailDuplicate(status === 200);
     } else {
       setEmailValid(false);

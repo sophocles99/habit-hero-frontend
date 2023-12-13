@@ -88,7 +88,7 @@ const PasswordInput = ({
           passwordValid === null && !passwordFocus ? styles["hidden"] : ""
         }
       >
-        {passwordFocus && passwordValid !== true ? (
+        {passwordFocus ? (
           passwordRulesDisplay
         ) : passwordValid ? (
           <p>
