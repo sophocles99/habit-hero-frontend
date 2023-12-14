@@ -1,3 +1,14 @@
-const validatePassword = (password: string, passwordRules: PasswordRulesType) => {
+const validatePassword = (
+  password: string,
+  passwordRules: PasswordRulesType
+) => {
+  let passwordValid = true;
+  const rulesSatisfied = passwordRules.map((rule) => {
+    const isRuleSatisfied = rule.regex.test(password);
+    if (!isRuleSatisfied) passwordValid = false;
+    return isRuleSatisfied;
+  });
+  return { passwordValid, rulesSatisfied };
+};
 
-}
+export default validatePassword;

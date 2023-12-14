@@ -20,8 +20,8 @@ const EmailInput = ({
   const [emailDuplicate, setEmailDuplicate] = useState<ValidState>(null);
 
   const handleBlur = async (e: ChangeEvent<HTMLInputElement>) => {
-    const email = e.target.value;
-    if (validateEmail(email)) {
+    const newEmail = e.target.value;
+    if (validateEmail(newEmail)) {
       setEmailValid(true);
       const { status } = await checkEmail(email);
       setEmailDuplicate(status === 200);

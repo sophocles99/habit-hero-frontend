@@ -2,6 +2,7 @@ import { ChangeEvent, Dispatch, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import styles from "../styles/form.module.css";
+import validatePassword from "../utils/validatePassword";
 
 type PasswordInputProps = {
   password: string;
@@ -38,17 +39,14 @@ const PasswordInput = ({
   );
 
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    setPassword(newValue);
-    let allRulesSatisfied = true;
-    setPasswordRulesSatisfied(
-      passwordRules.map((rule) => {
-        const isRuleSatisfied = rule.regex.test(newValue);
-        if (!isRuleSatisfied) allRulesSatisfied = false;
-        return isRuleSatisfied;
-      })
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+    const { passwordValid, rulesSatisfied } = validatePassword(
+      newPassword,
+      passwordRules
     );
-    setPasswordValid(allRulesSatisfied);
+    setPasswordValid(passwordValid);
+    setPasswordRulesSatisfied(rulesSatisfied);
   };
 
   const passwordRulesDisplay = (
