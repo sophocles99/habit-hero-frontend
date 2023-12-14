@@ -9,3 +9,5 @@ type ApiReturnType = {
   data: {};
   errorMessage: string;
 };
+
+type PasswordRulesType = { description: string; regex: RegExp }[];

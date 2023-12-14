@@ -8,7 +8,11 @@ const api = axios.create({
 const checkEmail = async (email: string): Promise<ApiReturnType> => {
   try {
     const response = await api.post("users/checkemail", { email });
-    const { status, data, data: {errorMessage} } = response;
+    const {
+      status,
+      data,
+      data: { errorMessage },
+    } = response;
     return { status, data, errorMessage };
   } catch (error) {
     return handleErrors(error);

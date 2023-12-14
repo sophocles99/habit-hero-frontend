@@ -17,7 +17,10 @@ const Register = () => {
   const [passwordValid, setPasswordValid] = useState<ValidState>(null);
 
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [confirmPasswordValid, setConfirmPasswordValid] = useState<ValidState>(null);
+  const [confirmPasswordValid, setConfirmPasswordValid] =
+    useState<ValidState>(null);
+
+  const [registerSuccess, setregisterSuccess] = useState(false);
 
   useEffect(() => {
     if (nameRef.current) {
@@ -27,7 +30,12 @@ const Register = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await registerUser(email, name, password);
+    const { status, data, errorMessage } = await registerUser(
+      email,
+      name,
+      password
+    );
+    console.log({ status, data, errorMessage });
   };
 
   return (

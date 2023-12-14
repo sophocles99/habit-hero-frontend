@@ -10,7 +10,7 @@ type PasswordInputProps = {
   setPasswordValid: Dispatch<boolean>;
 };
 
-const passwordRules = [
+const passwordRules: PasswordRulesType = [
   {
     description: "At least one lowercase letter",
     regex: /.*[a-z]/,

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import Joi from "joi";
-import styles from "../styles/form.module.css";
 import { ChangeEvent, Dispatch } from "react";
 import { checkEmail } from "../api";
+import validateEmail from "../utils/validateEmail";
+import styles from "../styles/form.module.css";
 
 type EmailInputProps = {
   email: string;
@@ -19,12 +19,9 @@ const EmailInput = ({
 }: EmailInputProps) => {
   const [emailDuplicate, setEmailDuplicate] = useState<ValidState>(null);
 
-  const validateEmail = async (e: ChangeEvent<HTMLInputElement>) => {
+  const handleBlur = async (e: ChangeEvent<HTMLInputElement>) => {
     const email = e.target.value;
-    const { error } = Joi.string()
-      .email({ tlds: { allow: false } })
-      .validate(email);
-    if (!error) {
+    if (validateEmail(email)) {
       setEmailValid(true);
       const { status } = await checkEmail(email);
       setEmailDuplicate(status === 200);
@@ -42,7 +39,7 @@ const EmailInput = ({
         className={styles["form-input"]}
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        onBlur={validateEmail}
+        onBlur={handleBlur}
       />
       <p
         className={`${styles["error"]} ${
