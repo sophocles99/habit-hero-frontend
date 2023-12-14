@@ -52,13 +52,18 @@
   cursor: pointer;
 }
 
+.form-button:disabled {
+  opacity: 0.7;
+}
+
 .hidden {
   display: none;
 }
- .error {
-  font-style: italic;
- }
 
- .valid {
+.error {
+  font-style: italic;
+}
+
+.valid {
   color: green;
- }
+}

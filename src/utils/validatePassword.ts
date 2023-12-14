@@ -1,7 +1,6 @@
-const validatePassword = (
-  password: string,
-  passwordRules: PasswordRulesType
-) => {
+import { passwordRules } from "./passwordRules";
+
+const validatePassword = (password: string) => {
   let passwordValid = true;
   const rulesSatisfied = passwordRules.map((rule) => {
     const isRuleSatisfied = rule.regex.test(password);

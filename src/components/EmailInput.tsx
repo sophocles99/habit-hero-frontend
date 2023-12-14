@@ -22,9 +22,14 @@ const EmailInput = ({
   const handleBlur = async (e: ChangeEvent<HTMLInputElement>) => {
     const newEmail = e.target.value;
     if (validateEmail(newEmail)) {
-      setEmailValid(true);
       const { status } = await checkEmail(email);
-      setEmailDuplicate(status === 200);
+      if (status === 200) {
+        setEmailValid(true);
+        setEmailDuplicate(false);
+      } else {
+        setEmailValid(false);
+        setEmailDuplicate(true);
+      }
     } else {
       setEmailValid(false);
     }
@@ -50,7 +55,7 @@ const EmailInput = ({
       </p>
       <p
         className={`${styles["error"]} ${
-          emailDuplicate !== false ? styles["hidden"] : ""
+          emailDuplicate ? "" : styles["hidden"]
         }`}
       >
         Email already in use. Please select another email address or login

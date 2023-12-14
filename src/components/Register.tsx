@@ -5,6 +5,8 @@ import EmailInput from "./EmailInput";
 import PasswordInput from "./PasswordInput";
 import { registerUser } from "../api";
 import styles from "../styles/form.module.css";
+import validateEmail from "../utils/validateEmail";
+import validatePassword from "../utils/validatePassword";
 
 const Register = () => {
   const nameRef = useRef<HTMLInputElement>(null);
@@ -20,7 +22,8 @@ const Register = () => {
   const [confirmPasswordValid, setConfirmPasswordValid] =
     useState<ValidState>(null);
 
-  const [registerSuccess, setregisterSuccess] = useState(false);
+  const [registerError, setRegisterError] = useState("");
+  const [registerSuccess, setRegisterSuccess] = useState(false);
 
   useEffect(() => {
     if (nameRef.current) {
@@ -30,54 +33,82 @@ const Register = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { status, data, errorMessage } = await registerUser(
-      email,
-      name,
-      password
-    );
-    console.log({ status, data, errorMessage });
+    const emailValidCheck = validateEmail(email);
+    const passwordValidCheck = validatePassword(password);
+    if (!emailValidCheck || !passwordValidCheck) {
+      setRegisterError("Registration unsuccessful");
+      return;
+    }
+    const { status } = await registerUser(email, name, password);
+    if (status === 201) {
+      setName("");
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+      setRegisterSuccess(true);
+      return;
+    } else {
+      setRegisterError("Registration unsuccessful");
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles["form-container"]}>
-      <h1>Welcome to Habit Hero!</h1>
-      <h2>
-        Please register or <Link to="/login">login</Link>
-      </h2>
-
-      <label htmlFor="name" className={styles["form-label"]}>
-        <p>Name</p>
-        <input
-          ref={nameRef}
-          type="text"
-          id="name"
-          className={styles["form-input"]}
-          maxLength={20}
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </label>
-      <EmailInput
-        email={email}
-        setEmail={setEmail}
-        emailValid={emailValid}
-        setEmailValid={setEmailValid}
-      />
-      <PasswordInput
-        password={password}
-        setPassword={setPassword}
-        passwordValid={passwordValid}
-        setPasswordValid={setPasswordValid}
-      />
-      <ConfirmPasswordInput
-        confirmPassword={confirmPassword}
-        setConfirmPassword={setConfirmPassword}
-        confirmPasswordValid={confirmPasswordValid}
-        setConfirmPasswordValid={setConfirmPasswordValid}
-        password={password}
-      />
-      <button className={styles["form-button"]}>Register</button>
-    </form>
+    <>
+      {registerSuccess ? (
+        <h2>
+          You have successfully registered! <Link to="/login">Login</Link>
+        </h2>
+      ) : (
+        <form onSubmit={handleSubmit} className={styles["form-container"]}>
+          <h1>Welcome to Habit Hero!</h1>
+          <h2>
+            Please register or <Link to="/login">login</Link>
+          </h2>
+          <p className={registerError ? styles["error"] : styles["hidden"]}>
+            {registerError}
+          </p>
+          <label htmlFor="name" className={styles["form-label"]}>
+            <p>Name</p>
+            <input
+              ref={nameRef}
+              type="text"
+              id="name"
+              className={styles["form-input"]}
+              maxLength={20}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </label>
+          <EmailInput
+            email={email}
+            setEmail={setEmail}
+            emailValid={emailValid}
+            setEmailValid={setEmailValid}
+          />
+          <PasswordInput
+            password={password}
+            setPassword={setPassword}
+            passwordValid={passwordValid}
+            setPasswordValid={setPasswordValid}
+          />
+          <ConfirmPasswordInput
+            confirmPassword={confirmPassword}
+            setConfirmPassword={setConfirmPassword}
+            confirmPasswordValid={confirmPasswordValid}
+            setConfirmPasswordValid={setConfirmPasswordValid}
+            password={password}
+          />
+          <button
+            className={styles["form-button"]}
+            disabled={
+              emailValid && passwordValid && confirmPasswordValid ? false : true
+            }
+          >
+            Register
+          </button>
+        </form>
+      )}
+    </>
   );
 };
 

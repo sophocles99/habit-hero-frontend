@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import styles from "../styles/form.module.css";
 import validatePassword from "../utils/validatePassword";
+import { passwordRules } from "../utils/passwordRules";
 
 type PasswordInputProps = {
   password: string;
@@ -10,22 +11,6 @@ type PasswordInputProps = {
   passwordValid: ValidState;
   setPasswordValid: Dispatch<boolean>;
 };
-
-const passwordRules: PasswordRulesType = [
-  {
-    description: "At least one lowercase letter",
-    regex: /.*[a-z]/,
-  },
-  {
-    description: "At least one uppercase letter",
-    regex: /.*[A-Z]/,
-  },
-  { description: "At least one number", regex: /.*\d/ },
-  {
-    description: "At least eight characters long",
-    regex: /.{8,}/,
-  },
-];
 
 const PasswordInput = ({
   password,
@@ -41,10 +26,7 @@ const PasswordInput = ({
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newPassword = e.target.value;
     setPassword(newPassword);
-    const { passwordValid, rulesSatisfied } = validatePassword(
-      newPassword,
-      passwordRules
-    );
+    const { passwordValid, rulesSatisfied } = validatePassword(newPassword);
     setPasswordValid(passwordValid);
     setPasswordRulesSatisfied(rulesSatisfied);
   };
@@ -102,3 +84,4 @@ const PasswordInput = ({
 };
 
 export default PasswordInput;
+export { passwordRules };
