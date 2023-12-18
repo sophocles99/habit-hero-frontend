@@ -82,7 +82,6 @@ const Register = () => {
           <EmailInput
             email={email}
             setEmail={setEmail}
-            emailValid={emailValid}
             setEmailValid={setEmailValid}
           />
           <PasswordInput

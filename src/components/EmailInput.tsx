@@ -7,17 +7,11 @@ import styles from "../styles/form.module.css";
 type EmailInputProps = {
   email: string;
   setEmail: Dispatch<string>;
-  emailValid: ValidState;
   setEmailValid: Dispatch<boolean>;
 };
 
-const EmailInput = ({
-  email,
-  setEmail,
-  emailValid,
-  setEmailValid,
-}: EmailInputProps) => {
-  const [emailDuplicate, setEmailDuplicate] = useState<ValidState>(null);
+const EmailInput = ({ email, setEmail, setEmailValid }: EmailInputProps) => {
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleBlur = async (e: ChangeEvent<HTMLInputElement>) => {
     const newEmail = e.target.value;
@@ -25,13 +19,16 @@ const EmailInput = ({
       const { status } = await checkEmail(email);
       if (status === 200) {
         setEmailValid(true);
-        setEmailDuplicate(false);
+        setErrorMessage("");
       } else {
         setEmailValid(false);
-        setEmailDuplicate(true);
+        setErrorMessage(
+          "Email already in use. Please select another email address or login"
+        );
       }
     } else {
       setEmailValid(false);
+      setErrorMessage("Please enter a valid email address");
     }
   };
 
@@ -46,20 +43,7 @@ const EmailInput = ({
         onChange={(e) => setEmail(e.target.value)}
         onBlur={handleBlur}
       />
-      <p
-        className={`${styles["error"]} ${
-          emailValid !== false ? styles["hidden"] : ""
-        }`}
-      >
-        Please enter a valid email address
-      </p>
-      <p
-        className={`${styles["error"]} ${
-          emailDuplicate ? "" : styles["hidden"]
-        }`}
-      >
-        Email already in use. Please select another email address or login
-      </p>
+      {errorMessage ? <p className={styles["error"]}>{errorMessage}</p> : ""}
     </label>
   );
 };
