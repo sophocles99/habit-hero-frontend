@@ -39,7 +39,7 @@ const Register = () => {
       setRegisterError("Registration unsuccessful");
       return;
     }
-    const { status } = await registerUser(email, name, password);
+    const { status, errorMessage } = await registerUser(email, name, password);
     if (status === 201) {
       setName("");
       setEmail("");
@@ -47,8 +47,11 @@ const Register = () => {
       setConfirmPassword("");
       setRegisterSuccess(true);
       return;
+    } else if (status >= 0 && errorMessage) {
+      setRegisterError(errorMessage);
     } else {
       setRegisterError("Registration unsuccessful");
+      console.log(status, errorMessage);
     }
   };
 

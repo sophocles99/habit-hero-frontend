@@ -26,8 +26,11 @@ const registerUser = async (
       name,
       password,
     });
-    const { status, data } = response;
-    return { status, data };
+    const {
+      status,
+      data: { message },
+    } = response;
+    return { status, message };
   } catch (error) {
     return handleErrors(error);
   }
@@ -49,7 +52,7 @@ const handleErrors = (error: any) => {
   }
   const errorMessage =
     error instanceof Error ? error.message : "Application error";
-  return { status: 0, errorMessage };
+  return { status: -1, errorMessage };
 };
 
 export { checkEmail, registerUser };
