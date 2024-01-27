@@ -6,8 +6,9 @@ type ValidState = boolean | null;
 
 type ApiReturnType = {
   status: number;
-  data: {};
-  errorMessage: string;
+  message?: string;
+  errorMessage?: string;
+  data?: {};
 };
 
 type PasswordRulesType = { description: string; regex: RegExp }[];

@@ -1,7 +1,9 @@
 import { createContext, Dispatch, SetStateAction, useState } from "react";
 
 type AuthStateType = {
+  isLoggedIn: boolean;
   email: string;
+  name: string;
   accessToken: string;
 };
 
@@ -10,12 +12,17 @@ type AuthContextType = {
   setAuthState: Dispatch<SetStateAction<AuthStateType>>;
 };
 
-const defaultAuthContext: AuthContextType = {
-  authState: { email: "", accessToken: "" },
-  setAuthState: () => {},
+const initialAuthState = {
+  isLoggedIn: false,
+  email: "",
+  name: "",
+  accessToken: "",
 };
 
-const initialAuthState = { email: "", accessToken: "" };
+const defaultAuthContext: AuthContextType = {
+  authState: initialAuthState,
+  setAuthState: () => {},
+};
 
 const AuthContext = createContext(defaultAuthContext);
 

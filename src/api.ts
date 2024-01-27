@@ -1,19 +1,15 @@
 import axios, { isAxiosError } from "axios";
 const baseURL = "http://localhost:3000/api";
-const api = axios.create({
-  baseURL,
-  validateStatus: (status) => status >= 200 && status < 500,
-});
+const api = axios.create({ baseURL });
 
 const checkEmail = async (email: string): Promise<ApiReturnType> => {
   try {
-    const response = await api.post("users/checkemail", { email });
+    const response = await api.post("/users/checkemail", { email });
     const {
       status,
-      data,
-      data: { errorMessage },
+      data: { message },
     } = response;
-    return { status, data, errorMessage };
+    return { status, message };
   } catch (error) {
     return handleErrors(error);
   }
@@ -31,28 +27,29 @@ const registerUser = async (
       password,
     });
     const { status, data } = response;
-    return { status, data, errorMessage: "" };
+    return { status, data };
   } catch (error) {
     return handleErrors(error);
   }
 };
 
 const handleErrors = (error: any) => {
-  console.log(error);
-
   if (isAxiosError(error)) {
     if (error.response) {
-      const { status, data } = error.response;
-      return { status, data, errorMessage: data.errorMessage };
+      const {
+        status,
+        data: { errorMessage },
+      } = error.response;
+      return { status, errorMessage };
     }
     if (error.request) {
       const { status } = error.request;
-      return { status, data: {}, errorMessage: "Network error" };
+      return { status, errorMessage: "Network error" };
     }
   }
-
-  const errorMessage = error instanceof Error ? error.message : "";
-  return { status: 0, data: {}, errorMessage };
+  const errorMessage =
+    error instanceof Error ? error.message : "Application error";
+  return { status: 0, errorMessage };
 };
 
-export { checkEmail as checkEmail, registerUser };
+export { checkEmail, registerUser };

@@ -55,9 +55,12 @@ const Register = () => {
   return (
     <>
       {registerSuccess ? (
-        <h2>
-          You have successfully registered! <Link to="/login">Login</Link>
-        </h2>
+        <>
+          <h1>You have successfully registered!</h1>
+          <h2>
+            Please <Link to="/login">login</Link>
+          </h2>
+        </>
       ) : (
         <form onSubmit={handleSubmit} className={styles["form-container"]}>
           <h1>Welcome to Habit Hero!</h1>
