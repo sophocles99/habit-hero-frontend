@@ -36,6 +36,19 @@ const registerUser = async (
   }
 };
 
+const login = async (
+  email: string,
+  password: string
+): Promise<ApiReturnType> => {
+  try {
+    const response = await api.post("/users/login", { email, password });
+    const { status, data } = response;
+    return { status, data };
+  } catch (error) {
+    return handleErrors(error);
+  }
+};
+
 const handleErrors = (error: any) => {
   if (isAxiosError(error)) {
     if (error.response) {
@@ -55,4 +68,4 @@ const handleErrors = (error: any) => {
   return { status: -1, errorMessage };
 };
 
-export { checkEmail, registerUser };
+export { checkEmail, registerUser, login };

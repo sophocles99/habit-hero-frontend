@@ -8,7 +8,10 @@ type ApiReturnType = {
   status: number;
   message?: string;
   errorMessage?: string;
-  data?: {};
+  data?: {
+    accessToken?: string;
+    name?: string;
+  };
 };
 
 type PasswordRulesType = { description: string; regex: RegExp }[];
