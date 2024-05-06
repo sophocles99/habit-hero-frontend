@@ -84,4 +84,3 @@ const PasswordInput = ({
 };
 
 export default PasswordInput;
-export { passwordRules };
